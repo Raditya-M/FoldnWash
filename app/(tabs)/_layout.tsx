@@ -48,6 +48,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="membership"
+        options={{
+          tabBarIcon: ({ focused }: { focused: boolean }) => (
+            <TabIcon name="card-outline" focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => (

@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://172.16.0.53:8000/api';
+export const BASE_URL = 'http://172.16.0.65:8000/api';
 
 export const ENDPOINTS = {
   // Auth

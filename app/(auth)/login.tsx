@@ -21,7 +21,8 @@ const { height } = Dimensions.get('window');
 export default function Login() {
   const router = useRouter();
   // DIUBAH: Mengubah state 'login' menjadi 'name'
-  const [name, setName] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
+  const [usernameFocused, setUsernameFocused] = useState<boolean>(false);
   const [password, setPassword]         = useState<string>('');
   const [showPass, setShowPass]         = useState<boolean>(false);
   const [loading, setLoading]           = useState<boolean>(false);
@@ -45,15 +46,15 @@ export default function Login() {
 
   async function handleLogin() {
     // DIUBAH: Validasi menggunakan 'name'
-    if (!name.trim() || !password.trim()) {
-      showToast('Nama dan password wajib diisi', 'warning');
+    if (!username.trim() || !password.trim()) {
+      showToast("Username dan password wajib diisi", "warning");
       return;
     }
     setLoading(true);
     try {
       // DIUBAH: Payload mengirimkan 'name' ke API backend
       const res = await api.post(ENDPOINTS.login, {
-        name: name.trim(),
+        username: username.trim(),
         password: password.trim(),
       });
       const token = res.token ?? res.data?.token;
@@ -72,21 +73,29 @@ export default function Login() {
   return (
     <View style={styles.root}>
       <ToastNotification
-        visible={toast.visible} message={toast.message} type={toast.type}
-        onHide={() => setToast(t => ({ ...t, visible: false }))}
+        visible={toast.visible}
+        message={toast.message}
+        type={toast.type}
+        onHide={() => setToast((t) => ({ ...t, visible: false }))}
       />
 
       {/* ── Tosca background full screen ── */}
       <View style={styles.toscaBg}>
         {/* Contour rings */}
         {[...Array(8)].map((_, i) => (
-          <View key={i} style={[styles.contour, {
-            width:  80 + i * 65,
-            height: 80 + i * 65,
-            top:  height * 0.02 - i * 8,
-            right: -30 + i * 8,
-            opacity: 0.13,
-          }]} />
+          <View
+            key={i}
+            style={[
+              styles.contour,
+              {
+                width: 80 + i * 65,
+                height: 80 + i * 65,
+                top: height * 0.02 - i * 8,
+                right: -30 + i * 8,
+                opacity: 0.13,
+              },
+            ]}
+          />
         ))}
 
         {/* Welcome text */}
@@ -99,12 +108,14 @@ export default function Login() {
       {/* ── White card yang overlap ke atas (wave effect) ── */}
       <KeyboardAvoidingView
         style={styles.cardOuter}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <Animated.View style={[
-          styles.card,
-          { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-        ]}>
+        <Animated.View
+          style={[
+            styles.card,
+            { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
+          ]}
+        >
           <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
@@ -114,13 +125,18 @@ export default function Login() {
             <View style={styles.signInUnderline} />
 
             {/* Nama */}
-            <Text style={styles.fieldLabel}>Nama</Text>
+            <Text style={styles.fieldLabel}>Username</Text>
 
-            <View style={[styles.inputRow, nameFocused && styles.inputRowFocused]}>
+            <View
+              style={[
+                styles.inputRow,
+                usernameFocused && styles.inputRowFocused,
+              ]}
+            >
               <Ionicons
                 name="person-outline"
                 size={16}
-                color={nameFocused ? Colors.primary : Colors.gray400}
+                color={usernameFocused ? Colors.primary : Colors.gray400}
                 style={styles.inputIcon}
               />
 
@@ -128,21 +144,24 @@ export default function Login() {
 
               <TextInput
                 style={styles.textInput}
-                value={name} // DIUBAH: value diarahkan ke state name
-                onChangeText={setName} // DIUBAH: menggunakan setter setName
-                placeholder="Masukkan nama"
+                value={username}
+                onChangeText={setUsername}
+                placeholder="Masukkan username"
                 placeholderTextColor={Colors.textMuted}
-                autoCapitalize="words"
-                onFocus={() => setNameFocused(true)}
-                onBlur={() => setNameFocused(false)}
+                autoCapitalize="none"
+                onFocus={() => setUsernameFocused(true)}
+                onBlur={() => setUsernameFocused(false)}
               />
             </View>
 
             {/* Password */}
             <Text style={styles.fieldLabel}>Password</Text>
-            <View style={[styles.inputRow, passFocused && styles.inputRowFocused]}>
+            <View
+              style={[styles.inputRow, passFocused && styles.inputRowFocused]}
+            >
               <Ionicons
-                name="lock-closed-outline" size={16}
+                name="lock-closed-outline"
+                size={16}
                 color={passFocused ? Colors.primary : Colors.gray400}
                 style={styles.inputIcon}
               />
@@ -157,10 +176,14 @@ export default function Login() {
                 onFocus={() => setPassFocused(true)}
                 onBlur={() => setPassFocused(false)}
               />
-              <TouchableOpacity onPress={() => setShowPass(!showPass)} style={styles.eyeBtn}>
+              <TouchableOpacity
+                onPress={() => setShowPass(!showPass)}
+                style={styles.eyeBtn}
+              >
                 <Ionicons
-                  name={showPass ? 'eye-off-outline' : 'eye-outline'}
-                  size={16} color={Colors.gray400}
+                  name={showPass ? "eye-off-outline" : "eye-outline"}
+                  size={16}
+                  color={Colors.gray400}
                 />
               </TouchableOpacity>
             </View>
@@ -172,7 +195,6 @@ export default function Login() {
               loading={loading}
               style={styles.loginBtn}
             />
-
           </ScrollView>
         </Animated.View>
       </KeyboardAvoidingView>

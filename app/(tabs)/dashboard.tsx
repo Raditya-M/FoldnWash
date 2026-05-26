@@ -234,7 +234,7 @@ async function loadData() {
                 <TransactionCard
                   key={t.id}
                   item={t}
-                  onPress={() => router.push(`/transaction/${t.id}` as any)}
+                  onPress={() => router.push(`/transactions/${t.id}` as any)}
                 />
               ))
             )}

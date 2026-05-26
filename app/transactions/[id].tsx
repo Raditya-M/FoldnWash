@@ -190,7 +190,7 @@ export default function TransactionDetail() {
 useEffect(() => {
   async function load() {
     try {
-      const res = await api.get(`/transaction/${id}`);
+      const res = await api.get(`/transactions/${id}`);
 
       const data =
         res.data?.data ??
