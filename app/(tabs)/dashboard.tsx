@@ -206,7 +206,7 @@ async function loadData() {
             />
             <View style={{ width: 12 }} />
             <SummaryCard
-              title="Bulan Ini"
+              title="Total Pengeluaran"
               value={formatRupiah(stats?.monthly_income ?? 0)}
               icon="wallet-outline"
               color={Colors.navy}
